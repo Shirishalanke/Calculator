@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculator</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <h1>Calculator</h1>
+
+    <input
+        type="text"
+        id="display"
+        placeholder="0"
+        readonly
+    >
+
+    <!-- Row 1 -->
+    <div class="button-row">
+        <button onclick="clearDisplay()">AC</button>
+        <button onclick="deleteLast()">DEL</button>
+        <button onclick="addValue('%')">%</button>
+        <button onclick="addValue('/')">÷</button>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="button-row">
+        <button onclick="addValue('7')">7</button>
+        <button onclick="addValue('8')">8</button>
+        <button onclick="addValue('9')">9</button>
+        <button onclick="addValue('*')">×</button>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="button-row">
+        <button onclick="addValue('4')">4</button>
+        <button onclick="addValue('5')">5</button>
+        <button onclick="addValue('6')">6</button>
+        <button onclick="addValue('-')">−</button>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="button-row">
+        <button onclick="addValue('1')">1</button>
+        <button onclick="addValue('2')">2</button>
+        <button onclick="addValue('3')">3</button>
+        <button onclick="addValue('+')">+</button>
+    </div>
+
+    <!-- Row 5 -->
+    <div class="button-row">
+        <button onclick="addValue('00')">00</button>
+        <button onclick="addValue('0')">0</button>
+        <button onclick="addValue('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+
+</div>
+
+<script>
+
+const display = document.getElementById("display");
+
+
+function addValue(value) {
+    display.value += value;
+}
+
+
+function clearDisplay() {
+    display.value = "";
+}
+
+
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+
+
+function calculate() {
+
+    let expression = display.value;
+
+    if (expression === "") {
+        return;
+    }
+
+    try {
+
+        expression = expression.replace(
+            /(\d+(\.\d+)?)%/g,
+            "($1/100)"
+        );
+
+        let result = Function(
+            '"use strict"; return (' +
+            expression +
+            ')'
+        )();
+
+        if (!isFinite(result)) {
+
+            display.value = "Cannot divide by 0";
+
+        } else {
+
+            display.value = result;
+
+        }
+
+    } catch (error) {
+
+        display.value = "Error";
+
+    }
+}
+
+</script>
+
+</body>
+
+</html>
